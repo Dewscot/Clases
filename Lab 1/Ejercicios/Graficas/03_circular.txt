@@ -1,0 +1,7 @@
+# Ejercicio 3 - Grafico circular: gastos mensuales (total = 500)
+# categoria gasto
+Alimentación 200
+Transporte 100
+Ocio 75
+Material_de_estudio 50
+Ahorro 75

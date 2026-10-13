@@ -1,0 +1,410 @@
+GUIA RAPIDA: PYTHON + MINIFORGE + VS CODE
+=============================================
+
+Objetivo
+--------
+Mantener una instalación ordenada de Python para trabajo científico:
+
+- Miniforge administra Python y los entornos.
+- "base" se deja principalmente para administrar Conda/Mamba.
+- "general" es el entorno de uso cotidiano.
+- Para proyectos especiales, se clona "general" y se agregan solo los paquetes extra.
+- Si alguna vez se necesita un entorno virtual tradicional, se puede usar .venv.
+- VS Code debe apuntar al intérprete correcto en cada proyecto.
+
+
+1. INSTALACION BASE
+-------------------
+
+Instalar Miniforge para Windows x86_64.
+
+Durante la instalación:
+- Instalar solo para el usuario actual ("Just Me").
+- Dejar la ruta predeterminada, por ejemplo:
+  C:\Users\Julio\miniforge3
+- No es necesario agregar Miniforge manualmente al PATH.
+- Conviene dejar "base" lo más limpio posible.
+
+
+2. CREAR EL ENTORNO GENERAL
+---------------------------
+
+Abrir Miniforge Prompt y ejecutar:
+
+    mamba create -n general python=3.13 numpy scipy matplotlib sympy pandas jupyterlab ipykernel
+
+Cuando pregunte si desea continuar:
+
+    y
+
+Activarlo:
+
+    conda activate general
+
+Comprobar:
+
+    python --version
+    where.exe python
+
+La ruta debería ser similar a:
+
+    C:\Users\Julio\miniforge3\envs\general\python.exe
+
+Probar los paquetes principales:
+
+    python -c "import numpy, scipy, matplotlib, sympy, pandas; print('Entorno general OK')"
+
+
+3. HACER QUE "GENERAL" SEA EL ENTORNO HABITUAL
+----------------------------------------------
+
+Configurar Conda para que el entorno predeterminado sea "general":
+
+    conda config --set default_activation_env general
+    conda config --set auto_activate true
+
+Inicializar Conda para PowerShell:
+
+    conda init powershell
+
+Después:
+1. Cerrar completamente PowerShell / Windows Terminal / VS Code.
+2. Abrir una terminal nueva.
+
+Lo normal será ver:
+
+    (general) PS C:\Users\Julio>
+
+Así no es necesario ejecutar "conda activate general" cada vez.
+
+
+4. COMANDOS BASICOS DEL DIA A DIA
+---------------------------------
+
+Ver los entornos disponibles:
+
+    conda env list
+
+Activar el entorno general:
+
+    conda activate general
+
+Salir del entorno actual:
+
+    conda deactivate
+
+Activar explícitamente "base":
+
+    conda activate base
+
+Volver a "general":
+
+    conda activate general
+
+Comprobar qué Python se está usando:
+
+    where.exe python
+    python --version
+
+Comprobar la ruta exacta desde Python:
+
+    python -c "import sys; print(sys.executable)"
+
+
+5. INSTALAR NUEVOS PAQUETES EN "GENERAL"
+----------------------------------------
+
+Para paquetes científicos disponibles en conda-forge, preferir:
+
+    mamba install nombre_paquete
+
+Ejemplo:
+
+    mamba install scikit-learn
+
+Varios paquetes:
+
+    mamba install astropy h5py numba
+
+Si un paquete no existe en conda-forge y sí en PyPI, se puede usar pip dentro del entorno activo:
+
+    python -m pip install nombre_paquete
+
+Regla práctica:
+- Preferir mamba/conda para el stack científico.
+- Usar pip cuando sea necesario.
+- Antes de instalar, comprobar siempre qué entorno está activo.
+
+
+6. CREAR UN ENTORNO ESPECIAL A PARTIR DE "GENERAL"
+--------------------------------------------------
+
+Si un proyecto requiere paquetes especiales, una versión distinta o se quiere aislar completamente:
+
+Clonar "general":
+
+    conda create -n nombre_proyecto --clone general
+
+Ejemplo:
+
+    conda create -n astronomia --clone general
+
+Activarlo:
+
+    conda activate astronomia
+
+Agregar paquetes especiales:
+
+    mamba install astropy h5py numba
+
+Los entornos quedan separados: modificar "astronomia" no modifica "general".
+
+Conda puede reutilizar archivos mediante su caché y enlaces, por lo que un clon no necesariamente duplica todo el espacio físico, aunque sí puede consumir espacio adicional.
+
+
+7. VOLVER AL ENTORNO GENERAL
+----------------------------
+
+Desde un entorno especializado:
+
+    conda activate general
+
+No es obligatorio desactivar antes: "conda activate general" cambia directamente al entorno deseado.
+
+
+8. BORRAR UN ENTORNO QUE YA NO SE NECESITA
+------------------------------------------
+
+Primero salir de él si está activo:
+
+    conda deactivate
+
+Luego:
+
+    conda remove -n nombre_proyecto --all
+
+Ejemplo:
+
+    conda remove -n astronomia --all
+
+
+9. CREAR UN .VENV TRADICIONAL
+-----------------------------
+
+Usar .venv solo cuando se quiera un entorno Python tradicional y separado.
+
+Ir a la carpeta del proyecto:
+
+    cd C:\ruta\del\proyecto
+
+Asegurarse de tener activo el Python deseado:
+
+    conda activate general
+
+Crear el entorno:
+
+    python -m venv .venv
+
+Activarlo en PowerShell:
+
+    .\.venv\Scripts\Activate.ps1
+
+La terminal debería mostrar algo parecido a:
+
+    (.venv) (general) PS C:\ruta\del\proyecto>
+
+Dentro del .venv instalar paquetes con:
+
+    python -m pip install nombre_paquete
+
+Ejemplo:
+
+    python -m pip install requests
+
+Salir del .venv:
+
+    deactivate
+
+IMPORTANTE:
+Un .venv normal NO hereda automáticamente NumPy, SciPy, Matplotlib, etc. desde "general".
+
+Por eso, para proyectos científicos donde se quiera partir desde el stack de "general", normalmente es más cómodo clonar el entorno Conda en lugar de usar .venv.
+
+
+10. VS CODE: SELECCIONAR EL INTERPRETE CORRECTO
+-----------------------------------------------
+
+En VS Code:
+
+    Ctrl + Shift + P
+
+Buscar:
+
+    Python: Select Interpreter
+
+Para el trabajo normal seleccionar:
+
+    general
+
+La ruta debería ser similar a:
+
+    C:\Users\Julio\miniforge3\envs\general\python.exe
+
+Para un proyecto especializado seleccionar su entorno correspondiente.
+
+Para un .venv seleccionar:
+
+    .venv\Scripts\python.exe
+
+VS Code normalmente recuerda la selección por proyecto/workspace.
+
+
+11. VS CODE: NOTEBOOKS .IPYNB
+-----------------------------
+
+En un notebook, además del intérprete general de VS Code, revisar el kernel en la esquina superior derecha:
+
+    Select Kernel
+    -> Python Environments
+    -> general
+
+O elegir el entorno especializado correspondiente.
+
+Para confirmar dentro del notebook:
+
+    import sys
+    print(sys.executable)
+
+Debería apuntar al entorno correcto, por ejemplo:
+
+    C:\Users\Julio\miniforge3\envs\general\python.exe
+
+
+12. SI VS CODE SIGUE INTENTANDO USAR UN .VENV ANTIGUO
+----------------------------------------------------
+
+Puede ocurrir si el proyecto tenía seleccionado previamente otro intérprete.
+
+Pasos:
+
+1. Ctrl + Shift + P
+2. "Python: Select Interpreter"
+3. Seleccionar "general"
+4. Cerrar la terminal integrada actual con la papelera.
+5. Crear una terminal nueva.
+
+Comprobar:
+
+    python -c "import sys; print(sys.executable)"
+
+Si existe un .venv viejo que ya no se necesita, se puede borrar su carpeta:
+
+    Remove-Item -Recurse -Force .venv
+
+
+13. CONFIGURACION DE VS CODE QUE PUEDE QUEDAR COMO DEFAULT
+----------------------------------------------------------
+
+Python: Default Interpreter Path:
+
+    C:\Users\Julio\miniforge3\envs\general\python.exe
+
+Esto ayuda a que proyectos nuevos encuentren "general".
+
+Sin embargo, si un workspace ya tenía otro intérprete seleccionado, hay que cambiarlo manualmente usando:
+
+    Python: Select Interpreter
+
+
+14. REGLA PRACTICA PARA DECIDIR
+-------------------------------
+
+Caso A: script, notebook, gráficos, cálculo numérico, tareas normales
+    -> usar "general"
+
+Caso B: proyecto con paquetes especiales o versiones particulares
+    -> clonar "general"
+
+Caso C: proyecto pequeño de Python donde se quiera aislamiento tradicional
+    -> usar .venv
+
+Caso D: dudas sobre qué Python está activo
+    -> ejecutar:
+
+       where.exe python
+       python --version
+       python -c "import sys; print(sys.executable)"
+
+
+15. CHULETA CORTA
+-----------------
+
+# Entorno normal
+conda activate general
+
+# Ver entornos
+conda env list
+
+# Instalar paquete
+mamba install paquete
+
+# Crear proyecto especial
+conda create -n nombre_proyecto --clone general
+
+# Entrar al proyecto
+conda activate nombre_proyecto
+
+# Agregar paquetes especiales
+mamba install paquete1 paquete2
+
+# Volver a general
+conda activate general
+
+# Borrar entorno
+conda remove -n nombre_proyecto --all
+
+# Crear .venv
+python -m venv .venv
+
+# Activar .venv
+.\.venv\Scripts\Activate.ps1
+
+# Instalar dentro del .venv
+python -m pip install paquete
+
+# Salir del .venv
+deactivate
+
+
+16. FILOSOFIA DEL ESQUEMA
+-------------------------
+
+La estructura final queda aproximadamente así:
+
+    Miniforge
+    |
+    +-- base
+    |   +-- Conda / Mamba / administración
+    |
+    +-- general
+    |   +-- Python
+    |   +-- NumPy
+    |   +-- SciPy
+    |   +-- Matplotlib
+    |   +-- SymPy
+    |   +-- Pandas
+    |   +-- JupyterLab
+    |
+    +-- proyecto_especial_1
+    |   +-- clon de general
+    |   +-- paquetes particulares
+    |
+    +-- proyecto_especial_2
+        +-- clon de general
+        +-- paquetes particulares
+
+La idea es mantener "general" estable y cómodo para el trabajo cotidiano,
+y aislar solamente aquello que realmente lo necesite.
+
+
+

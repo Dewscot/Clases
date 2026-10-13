@@ -1,0 +1,22 @@
+# Ejercicio 1 - Histograma: tiempos de prueba de matematica
+# estudiante tiempo_min
+1 35
+2 42
+3 48
+4 31
+5 52
+6 45
+7 38
+8 39
+9 55
+10 44
+11 47
+12 36
+13 41
+14 43
+15 58
+16 32
+17 49
+18 46
+19 40
+20 51

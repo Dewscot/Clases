@@ -1,0 +1,7 @@
+# Ejercicio 2 - Barras: cantidad de mascotas vendidas
+# animal cantidad_vendida
+Peces 15
+Hámsters 8
+Gatos 5
+Perros 3
+Pájaros 6
