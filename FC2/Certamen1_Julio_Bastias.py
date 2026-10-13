@@ -41,7 +41,7 @@ def f(x):
 x_P_4 = np.linspace(-10,10,100)
 y_P_4 = f(x_P_4)
 plt.scatter(x_P_4,y_P_4)
-#plt.show()
+plt.show()
 
 a, b = 0, 1
 tolerancia = 1e-6
