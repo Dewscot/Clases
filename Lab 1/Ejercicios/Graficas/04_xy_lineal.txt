@@ -1,0 +1,8 @@
+# Ejercicio 4 - Grafico XY lineal: crecimiento de una planta de tomate
+# dia altura_cm
+1 2
+2 4
+3 5
+4 8
+5 10
+6 11
