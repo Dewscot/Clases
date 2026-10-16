@@ -1,0 +1,78 @@
+MINI-INFORME LATEX: GRAVEDAD CON UN CARRITO
+
+ARCHIVOS
+  main.tex               Informe editable con dos columnas y apendice.
+  datos_gravedad.txt     Unico archivo de datos usado: siete puntos.
+  analisis_gravedad.py   Programa secuencial con NumPy y Matplotlib.
+  ajuste_gravedad.pdf    Unica salida en archivo del programa: la grafica.
+  figuras/              Logos originales UdeC y FCFM.
+  montaje_carrito.jpg    Fotografia de la experiencia.
+
+USO
+Extraiga el ZIP y abra una terminal en la carpeta del proyecto.
+Instale las dependencias una vez:
+  python -m pip install -r requirements.txt
+Ejecute el analisis:
+  python analisis_gravedad.py
+Se imprimen los resultados y se guarda la grafica, que luego se muestra.
+Compile main.tex con pdfLaTeX o suba el ZIP a Overleaf. La grafica ya esta
+incluida. Complete asignatura, seccion, docente, ayudante y fecha.
+Si cambia datos o parametros, regenere la grafica y revise los valores
+escritos en main.tex; el texto y las tablas no se actualizan automaticamente.
+
+DATOS Y CRITERIOS CONFIRMADOS
+Los valores del archivo principal se conservan exactamente. Las posiciones
+finales son 70 y 90 cm; se resta x0 = 20.5 cm para obtener los recorridos.
+El carrito parte desde reposo. El modelo ideal es a = g sen(theta).
+Los dos puntos de 5 grados corresponden a distancias diferentes.
+No se usan los datos de contexto ni archivos de datos del repositorio.
+
+La regla tiene division minima de 1 mm = 0.1 cm. Segun el criterio de
+la Clase 2, se adopta la mitad para la lectura inicial: u_x0 = 0.05 cm.
+Se conserva u_xf = 0.1 cm del archivo porque, segun quien realizo el ensayo,
+el tope se movia ligeramente y debia recolocarse y fijarse entre medidas.
+Este valor ya representa el error asignado a esa posicion; no se agrega
+otra vez la misma contribucion de lectura.
+Para lecturas independientes: u_d = raiz(u_xf^2 + u_x0^2) = 0.111803... cm.
+x0 se midio una sola vez y es comun a todos los recorridos; su contribucion
+no disminuye por tener varios puntos. No se calcula un error global del ajuste.
+
+El indicador angular tiene division minima de 1 grado. Se usa u_theta =
+0.5 grados como mitad de esa division, segun la Clase 2. La columna del
+archivo que conserva el 1 grado provisional NO se utiliza para asignar
+la incertidumbre actual: esta se calcula explicitamente en el programa.
+Los angulos medidos no se modifican.
+
+u_t = 0.30 s sigue siendo una estimacion personal del cronometraje manual,
+aplicada provisionalmente a los tiempos usados, principalmente promedios.
+No procede de una calibracion ni de un analisis estadistico. No se divide
+por raiz(N) ni se interpreta como desviacion estandar de las repeticiones.
+
+METODO
+Se aplica la formula general por derivadas parciales para variables
+independientes de la Clase 3, a primer orden:
+  a = 2 d / t^2
+  u(a) = a raiz[(u_d/d)^2 + (2 u_t/t)^2]
+  g_i = a / sen(theta)
+  u(g_i) = g_i raiz[(u(a)/a)^2 + (u_theta/tan(theta))^2]
+Angulos e incertidumbre angular se convierten a radianes.
+La grafica lleva barras horizontales cos(theta)*u_theta y verticales u(a).
+Las aproximaciones son limitadas para errores relativos grandes y no
+representan intervalos de confianza.
+
+La pendiente con intercepto cero es sum(X*a)/sum(X^2), X = sen(theta).
+El resultado central es g = 9.967069686... m/s^2. No se calcula incertidumbre
+de esa pendiente. Las incertidumbres informadas corresponden a a y g_i;
+no se deduce de ellas automaticamente una incertidumbre del ajuste.
+La diferencia nominal frente a 9.81 m/s^2 es 1.6011... por ciento; no es
+una medida de precision ni una incertidumbre experimental.
+
+La consola muestra cifras de control para verificar operaciones. En la
+Tabla 2 del informe se redondea cada incertidumbre a una cifra significativa
+y el valor correspondiente al mismo orden decimal, segun la Clase 2.
+Los calculos y los puntos de la grafica conservan toda la precision.
+
+REFERENCIAS PRINCIPALES
+Laboratorio I: Clase 1_Graficos; Clase 2_Errores; Clase 3_Medidas estadisticas.
+Referencia complementaria de estilo (sin cambios en GitHub):
+https://github.com/Dewscot/Clases/tree/main/Lab%201
