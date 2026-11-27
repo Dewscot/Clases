@@ -1,0 +1,67 @@
+FC2 — CERTAMEN 2 | CHECKLIST DE VERIFICACIÓN
+
+1. INTEGRALES: RECTÁNGULO, PUNTO MEDIO Y TRAPECIO
+[ ] N es el número de subintervalos; hay N+1 nodos.
+[ ] h = (b-a)/N. Prefiero linspace(a,b,N+1) a arange con paso flotante.
+[ ] Rectángulo izquierdo: no incluir el último nodo.
+[ ] Punto medio: evaluar en la mitad de cada subintervalo.
+[ ] Trapecio: extremos con peso 1 e interiores con peso 2 (factor h/2).
+[ ] Si los datos no son equiespaciados, usar cada ancho x[i+1]-x[i].
+
+2. SIMPSON E INTEGRALES ITERADAS
+[ ] N es positivo y par; N+1 es impar.
+[ ] h = (b-a)/N; factor h/3; pesos 1,4,2,4,...,2,4,1.
+[ ] Si uso grupos de tres puntos, recorrer range(0,N,2).
+[ ] Si cambia un límite, recalcular h y los nodos correspondientes.
+[ ] Integral iterada: fijar la variable exterior mientras integro la interior.
+[ ] Usar Nx, Ny y sus pasos respectivos; refinar ambos por separado.
+[ ] Si cambio de coordenadas, incluir el jacobiano (polares: r).
+[ ] Integrales complejas: conservar la parte imaginaria hasta el final.
+[ ] scipy.special.fresnel devuelve S primero y C después.
+[ ] Simpson: al duplicar N, el error suele bajar ~16 veces si la función es suave y estamos en régimen asintótico.
+
+3. INTERPOLACIÓN DE LAGRANGE
+[ ] x e y tienen igual longitud; cada y[i] corresponde a x[i].
+[ ] Los nodos son distintos; no necesitan estar equiespaciados.
+[ ] Con m nodos, el grado máximo es m-1.
+[ ] Reiniciar L=1 para cada i y excluir j=i del producto.
+[ ] z son los puntos de evaluación; x e y son los datos originales.
+[ ] Comprobar np.allclose(lagrange(x,x,y), y).
+[ ] Coincidir en los nodos no garantiza precisión entre ellos; evitar extrapolar sin justificación.
+
+4. VANDERMONDE Y CAMBIO DE BASE
+[ ] m nodos y m funciones base: matriz M de tamaño m x m.
+[ ] M[i,j] = phi(x[i],j): fila = nodo, columna = función base.
+[ ] Resolver A = np.linalg.solve(M,y), no calcular la inversa.
+[ ] Evaluar con la misma base y el mismo orden de argumentos phi(z,j).
+[ ] Monomios: A está en orden ascendente; np.polyval usa orden descendente.
+[ ] Legendre: eval_legendre(j,x) recibe primero el grado.
+[ ] Monomios y Legendre del mismo grado: mismo interpolante, distintos coeficientes (salvo error numérico).
+[ ] Una base general (p. ej. cosenos) puede producir una matriz singular; revisar cond(M).
+[ ] Verificar M @ A ≈ y y, si conozco f, comparar en una malla nueva, no solo en los nodos.
+
+5. BÚSQUEDA DE RAÍCES
+[ ] Bisección y posición falsa: f continua, cambio de signo o raíz en un extremo.
+[ ] Para varias raíces, buscar varios intervalos; un barrido puede omitir raíces dobles.
+[ ] Newton: revisar la derivada y evitar denominadores nulos o muy pequeños.
+[ ] Secante: dos semillas distintas; revisar f(x1)-f(x0).
+[ ] Comprobar que la raíz esté en el rango pedido y que abs(f(raiz)) sea pequeño.
+[ ] Un residuo o paso pequeño no garantiza por sí solo precisión en x.
+[ ] Limitar iteraciones; no confundir falta de convergencia con una solución.
+
+6. SISTEMAS LINEALES Y NO LINEALES
+[ ] En F(u) y J(u), mantener el mismo orden de ecuaciones y variables.
+[ ] J[i,j] = derivada de F[i] respecto de u[j]; revisar signos.
+[ ] Newton: du = np.linalg.solve(J(u),-F(u)); u = u + du.
+[ ] Recalcular J en cada iteración; la semilla importa.
+[ ] Comprobar todas las componentes de F(u), no solo el tamaño del paso.
+[ ] Si el sistema es lineal A @ u = b, basta solve(A,b).
+
+7. COMPROBACIÓN FINAL (CUALQUIER MÉTODO)
+[ ] Ejecutar desde el principio; no depender de variables de celdas anteriores.
+[ ] Revisar límites, índices, unidades, signos y valores NaN/inf.
+[ ] Probar un caso sencillo con resultado conocido; graficar si ayuda.
+[ ] Refinar la malla o tolerancia y comparar; cuatro cifras seguras no son siempre cuatro decimales.
+[ ] Si piden implementar un método, usar SciPy como comprobación, no como sustituto.
+
+
